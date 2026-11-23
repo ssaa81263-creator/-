@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ليث أبو كرم | صيانة وبرمجة وطلب شاشات</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a30;
+      --card-2: #182340;
+      --text: #f3f6fc;
+      --muted: #9fb0d0;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --border: rgba(255, 255, 255, 0.1);
+      --pink: #ec4899;
+      --red: #ef4444;
+      --amber: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      background: radial-gradient(circle at top, #172554, var(--bg) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(18, 26, 48, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+      user-select: none;
+    }
+
+    .hero p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: #061326; }
+    .btn-wa { background: var(--accent-2); color: #052010; width: 100%; padding: 13px; font-size: 1rem; }
+    .btn-call { background: #334155; flex: 1; }
+    .btn-copy { background: #1e293b; border: 1px solid var(--border); flex: 1; }
+    .btn-add { background: var(--accent-2); color: #052010; }
+    .btn-small { padding: 6px 10px; font-size: 0.8rem; border-radius: 8px; background: #1e293b; border: 1px solid var(--border); color: var(--text); cursor: pointer; }
+    .btn-del { background: rgba(239, 68, 68, 0.18); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.35); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .search-input, .field-input, .field-select {
+      width: 100%;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-input:focus, .field-input:focus, .field-select:focus {
+      border-color: var(--accent);
+    }
+
+    .price-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 310px;
+      overflow-y: auto;
+      margin-top: 10px;
+      padding-left: 4px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      text-align: right;
+      flex: 1;
+      color: var(--text);
+    }
+
+    .price-item.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.14);
+    }
+
+    .price-tag {
+      background: rgba(56, 189, 248, 0.16);
+      color: #7dd3fc;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .banner-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .b-pink { background: var(--pink); }
+    .b-red { background: var(--red); }
+    .b-amber { background: var(--amber); color: #1f1400; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 540px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .field-group { margin-bottom: 11px; }
+    .field-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .chip:hover { color: var(--text); border-color: var(--accent); }
+
+    .note-box {
+      background: rgba(255, 255, 255, 0.04);
+      border-right: 3px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .toast {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #86efac;
+      min-height: 20px;
+      margin-top: 8px;
+    }
+
+    .admin-panel {
+      display: none;
+      border-color: rgba(56, 189, 248, 0.35);
+      background: linear-gradient(180deg, rgba(24, 35, 64, 0.96), rgba(18, 26, 48, 0.98));
+    }
+
+    .admin-panel.open { display: block; }
+
+    .admin-footer-btn {
+      background: transparent;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1 id="brandTitle" onclick="handleTitleTap()">ليث أبو كرم</h1>
+      <p>منصة أسعار الشاشات، خدمات الصيانة والبرمجة، وطلب التوصيل المباشر.</p>
+      <button class="btn btn-primary" onclick="document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' })">
+        دخول إلى الواجهة
+      </button>
+    </section>
+
+    <!-- لوحة إضافة وترتيب المواد الخاصة بالمالك فقط -->
+    <section id="adminPanel" class="card admin-panel">
+      <div class="section-header">
+        <h2 class="section-title">إضافة وترتيب مادة جديدة (خاص بك)</h2>
+        <button type="button" class="btn-small" onclick="toggleAdminPanel(false)">إغلاق اللوحة</button>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label for="newItemName">اسم الجهاز أو الشاشة</label>
+          <input id="newItemName" class="field-input" type="text" placeholder="مثال: iPhone 13 / A54" />
+        </div>
+        <div class="field-group">
+          <label for="newItemPrice">السعر (بالدينار)</label>
+          <input id="newItemPrice" class="field-input" type="text" placeholder="مثال: 55,000 د.ع" />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label for="sortMode">طريقة ترتيب القائمة</label>
+          <select id="sortMode" class="field-select" onchange="changeSortMode()">
+            <option value="newest">الأحدث إضافة أولاً (ينزل بالبداية)</option>
+            <option value="priceDesc">من الأعلى سعراً إلى الأقل</option>
+            <option value="priceAsc">من الأقل سعراً إلى الأعلى</option>
+            <option value="alpha">أبجدياً حسب اسم الجهاز</option>
+          </select>
+        </div>
+        <div class="field-group" style="display:flex; align-items:flex-end; gap:8px;">
+          <button type="button" class="btn btn-add" style="flex:1;" onclick="addNewItem()">إضافة وترتيب</button>
+          <button type="button" class="btn-small" onclick="resetDefaultItems()">استعادة الافتراضي</button>
+        </div>
+      </div>
+      <div id="adminMsg" class="toast"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-header">
+        <h2 class="section-title">قائمة الشاشات والأسعار (بحث سريع)</h2>
+        <button type="button" class="admin-footer-btn" onclick="openAdminWithPin()">+ إضافة / ترتيب مادة</button>
+      </div>
+
+      <input
+        id="searchInput"
+        class="search-input"
+        type="search"
+        placeholder="ابحث عن جهاز أو شاشة... مثال: Note 20، iPhone 11، Redmi"
+        oninput="renderList()"
+      />
+      <div id="priceList" class="price-list"></div>
+
+      <div class="quick-actions">
+        <button class="banner-btn b-pink" onclick="selectCustom('أسعار شاشات الأجهزة كافة', 'حسب الموديل')">
+          أسعار شاشات الأجهزة كافة
+        </button>
+        <button class="banner-btn b-red" onclick="setServiceType('توصيل شاشة إلى العنوان')">
+          طلب شاشة وتوصيل
+        </button>
+        <button class="banner-btn b-amber" onclick="setServiceType('صيانة في المركز')">
+          صيانة الموبايلات
+        </button>
+      </div>
+    </section>
+
+    <section id="orderForm" class="card">
+      <h2 class="section-title">إرسال طلب سريع عبر واتساب</h2>
+
+      <div class="note-box">
+        تتوفر خيارات شاشات متنوعة حسب الموديل والتوفر، ويتم فحص الجهاز والتأكد من عمل اللمس والألوان قبل التسليم.
+      </div>
+
+      <div class="field-group">
+        <label for="selectedItem">الجهاز / الخدمة المختارة</label>
+        <input id="selectedItem" class="field-input" type="text" value="Samsung Note 20 Ultra — 110,000 د.ع" />
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label for="customerName">الاسم</label>
+          <input id="customerName" class="field-input" type="text" placeholder="اكتب اسمك" />
+        </div>
+        <div class="field-group">
+          <label for="customerPhone">رقم الهاتف</label>
+          <input id="customerPhone" class="field-input" type="tel" placeholder="07755996588" />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label for="serviceType">نوع الخدمة</label>
+          <select id="serviceType" class="field-select">
+            <option value="تبديل شاشة في المركز">تبديل شاشة في المركز</option>
+            <option value="توصيل شاشة إلى العنوان">توصيل شاشة إلى العنوان</option>
+            <option value="صيانة في المركز">صيانة في المركز</option>
+            <option value="برمجة وسوفت وير">برمجة وسوفت وير</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="deviceCondition">حالة الجهاز الحالية</label>
+          <input id="deviceCondition" class="field-input" type="text" placeholder="مثال: الشاشة مكسورة، اللمس شغال" />
+          <div class="chips">
+            <span class="chip" onclick="setCondition('الشاشة مكسورة')">الشاشة مكسورة</span>
+            <span class="chip" onclick="setCondition('اللمس متوقف')">اللمس متوقف</span>
+            <span class="chip" onclick="setCondition('تحتاج بطارية / فلات شحن')">بطارية / فلات شحن</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="customerAddress">المنطقة والشارع وأقرب نقطة دالة</label>
+        <input id="customerAddress" class="field-input" type="text" placeholder="مثال: البصرة - حي الأصدقاء - قرب..." />
+        <div class="chips">
+          <span class="chip" onclick="appendArea('حي الأصدقاء')">حي الأصدقاء</span>
+          <span class="chip" onclick="appendArea('العشار')">العشار</span>
+          <span class="chip" onclick="appendArea('الجنينة')">الجنينة</span>
+          <span class="chip" onclick="appendArea('القبلة')">القبلة</span>
+        </div>
+      </div>
+
+      <button class="btn btn-wa" onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
+
+      <div class="actions-row">
+        <button class="btn btn-copy" onclick="copyOrderSummary()">نسخ تفاصيل الطلب</button>
+        <a class="btn btn-call" href="tel:+9647755996588">اتصال مباشر</a>
+      </div>
+      <div id="toast" class="toast"></div>
+    </section>
+  </div>
+
+  <script>
+    const WHATSAPP_NUMBER = "9647755996588"; // غيّر إلى رقمك الحقيقي بالصيغة الدولية
+    const ADMIN_PIN = "1975"; // غيّر إلى رمز سري خاص بك أنت
+    const STORAGE_KEY = "laith_abu_karam_items_v1";
+    const SORT_KEY = "laith_abu_karam_sort_v1";
+
+    const defaultItems = [
+      { id: 1, name: "Samsung Note 20 Ultra", price: "110,000 د.ع" },
+      { id: 2, name: "iPhone X / XS", price: "35,000 د.ع" },
+      { id: 3, name: "iPhone 11", price: "30,000 د.ع" },
+      { id: 4, name: "iPhone 12 / 12 Pro", price: "45,000 د.ع" },
+      { id: 5, name: "Redmi Note 11 / 12", price: "25,000 د.ع" },
+      { id: 6, name: "Redmi 12C / 13C", price: "20,000 د.ع" }
+    ];
+
+    let items = loadItems();
+    let sortMode = localStorage.getItem(SORT_KEY) || "newest";
+    let adminUnlocked = false;
+    let activeId = items[0]?.id ?? null;
+    let tapCount = 0;
+
+    document.getElementById("sortMode").value = sortMode;
+
+    function loadItems() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (Array.isArray(saved) && saved.length) return saved;
+      } catch (e) {}
+      return [...defaultItems];
+    }
+
+    function saveItems() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function parsePriceNumber(priceStr) {
+      const digits = String(priceStr || "").replace(/[^\d]/g, "");
+      return digits ? Number(digits) : 0;
+    }
+
+    function getSortedItems() {
+      const copy = [...items];
+      if (sortMode === "newest") {
+        return copy.sort((a, b) => b.id - a.id);
+      }
+      if (sortMode === "priceDesc") {
+        return copy.sort((a, b) => parsePriceNumber(b.price) - parsePriceNumber(a.price));
+      }
+      if (sortMode === "priceAsc") {
+        return copy.sort((a, b) => parsePriceNumber(a.price) - parsePriceNumber(b.price));
+      }
+      if (sortMode === "alpha") {
+        return copy.sort((a, b) => a.name.localeCompare(b.name, "ar"));
+      }
+      return copy;
+    }
+
+    function changeSortMode() {
+      sortMode = document.getElementById("sortMode").value;
+      localStorage.setItem(SORT_KEY, sortMode);
+      renderList();
+    }
+
+    function addNewItem() {
+      const nameEl = document.getElementById("newItemName");
+      const priceEl = document.getElementById("newItemPrice");
+      const msgEl = document.getElementById("adminMsg");
+
+      const name = nameEl.value.trim();
+      let price = priceEl.value.trim();
+
+      if (!name || !price) {
+        msgEl.style.color = "#fca5a5";
+        msgEl.textContent = "اكتب اسم الجهاز والسعر أولاً.";
+        return;
+      }
+
+      if (!/د\.ع|دينار/.test(price)) {
+        price = `${price} د.ع`;
+      }
+
+      const newEntry = {
+        id: Date.now(),
+        name,
+        price
+      };
+
+      items.unshift(newEntry);
+      saveItems();
+      activeId = newEntry.id;
+      document.getElementById("selectedItem").value = `${newEntry.name} — ${newEntry.price}`;
+
+      nameEl.value = "";
+      priceEl.value = "";
+      msgEl.style.color = "#86efac";
+      msgEl.textContent = "تمت إضافة المادة وترتيب القائمة بنجاح.";
+      setTimeout(() => (msgEl.textContent = ""), 2500);
+
+      renderList();
+    }
+
+    function deleteItem(id, event) {
+      event.stopPropagation();
+      items = items.filter((x) => x.id !== id);
+      saveItems();
+      if (activeId === id) activeId = items[0]?.id ?? null;
+      renderList();
+    }
+
+    function resetDefaultItems() {
+      items = [...defaultItems];
+      saveItems();
+      activeId = items[0]?.id ?? null;
+      renderList();
+    }
+
+    function toggleAdminPanel(open) {
+      const panel = document.getElementById("adminPanel");
+      if (open) {
+        panel.classList.add("open");
+      } else {
+        panel.classList.remove("open");
+        adminUnlocked = false;
+      }
+    }
+
+    function openAdminWithPin() {
+      if (adminUnlocked) {
+        toggleAdminPanel(true);
+        return;
+      }
+      const entered = prompt("أدخل الرمز السري الخاص بك لفتح خانة الإضافة والترتيب:");
+      if (entered === ADMIN_PIN) {
+        adminUnlocked = true;
+        toggleAdminPanel(true);
+      } else if (entered !== null) {
+        alert("الرمز غير صحيح.");
+      }
+    }
+
+    function handleTitleTap() {
+      tapCount++;
+      if (tapCount >= 5) {
+        tapCount = 0;
+        openAdminWithPin();
+      }
+    }
+
+    function renderList() {
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      const listEl = document.getElementById("priceList");
+      listEl.innerHTML = "";
+
+      const sorted = getSortedItems();
+      const filtered = sorted.filter(
+        (item) => item.name.toLowerCase().includes(q) || item.price.toLowerCase().includes(q)
+      );
+
+      if (!filtered.length) {
+        listEl.innerHTML = `<div style="color: var(--muted); padding: 10px;">لم يتم العثور على مطابقة، يمكنك كتابة الموديل مباشرة في خانة الطلب.</div>`;
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "price-row";
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `price-item ${item.id === activeId ? "active" : ""}`;
+        btn.innerHTML = `<span>${item.name}</span><span class="price-tag">${item.price}</span>`;
+        btn.onclick = () => {
+          activeId = item.id;
+          document.getElementById("selectedItem").value = `${item.name} — ${item.price}`;
+          renderList();
+        };
+        row.appendChild(btn);
+
+        if (adminUnlocked) {
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn-small btn-del";
+          delBtn.textContent = "حذف";
+          delBtn.onclick = (e) => deleteItem(item.id, e);
+          row.appendChild(delBtn);
+        }
+
+        listEl.appendChild(row);
+      });
+    }
+
+    function selectCustom(label, priceText) {
+      activeId = null;
+      document.getElementById("selectedItem").value = `${label} (${priceText})`;
+      renderList();
+      document.getElementById("orderForm").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function setServiceType(val) {
+      document.getElementById("serviceType").value = val;
+      document.getElementById("orderForm").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function setCondition(val) {
+      document.getElementById("deviceCondition").value = val;
+    }
+
+    function appendArea(area) {
+      const addrEl = document.getElementById("customerAddress");
+      if (!addrEl.value.includes(area)) {
+        addrEl.value = addrEl.value ? `${area} - ${addrEl.value}` : area;
+      }
+    }
+
+    function buildMessage() {
+      const name = document.getElementById("customerName").value.trim() || "غير مذكور";
+      const phone = document.getElementById("customerPhone").value.trim() || "غير مذكور";
+      const item = document.getElementById("selectedItem").value.trim() || "غير محدد";
+      const service = document.getElementById("serviceType").value;
+      const condition = document.getElementById("deviceCondition").value.trim() || "غير مذكورة";
+      const address = document.getElementById("customerAddress").value.trim() || "غير مذكور";
+
+      return [
+        "طلب جديد — ليث أبو كرم",
+        "------------------------",
+        `الاسم: ${name}`,
+        `الجهاز / السعر: ${item}`,
+        `نوع الخدمة: ${service}`,
+        `حالة الجهاز: ${condition}`,
+        `العنوان: ${address}`,
+        `رقم الهاتف: ${phone}`
+      ].join("\n");
+    }
+
+    function sendWhatsApp() {
+      const text = encodeURIComponent(buildMessage());
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
+    }
+
+    function copyOrderSummary() {
+      const summary = buildMessage();
+      navigator.clipboard?.writeText(summary).then(() => {
+        const toast = document.getElementById("toast");
+        toast.textContent = "تم نسخ تفاصيل الطلب بنجاح.";
+        setTimeout(() => (toast.textContent = ""), 2500);
+      });
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
